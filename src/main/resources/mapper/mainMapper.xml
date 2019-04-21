@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ccsu.jssports.dao.MainMapper">
+
+    <select id="isAttendcanced" resultType="boolean">
+        select count(id) from t_attendance_info where open_id = #{openId} and attendance_time between #{leftTime} and #{rightTime}
+    </select>
+
+    <select id="selectList" resultType="cn.ccsu.jssports.pojo.AttendanceInfo">
+        select * from t_attendance_info where open_id = #{openId} and attendance_time between #{leftTime} and #{rightTime} order by attendance_time
+    </select>
+    <insert id="insert">
+        insert into t_attendance_info(open_id, attendance_time, step) values(#{openId}, #{attendanceTime}, #{step})
+    </insert>
+
+    <delete id="deleteById">
+        delete from t_attendance_info where id = #{id}
+    </delete>
+</mapper>

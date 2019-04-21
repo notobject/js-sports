@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ccsu.jssports.dao.UserMapper">
+    <select id="selectByOpenId" resultType="cn.ccsu.jssports.pojo.UserInfo">
+        select * from t_user_info where open_id = #{openId};
+    </select>
+
+    <select id="selectSession" resultType="cn.ccsu.jssports.pojo.Session">
+        select * from t_session where open_id = #{openId}
+    </select>
+
+    <select id="isExist" resultType="boolean">
+        select count(id) from t_user_info where open_id = #{openId}
+    </select>
+
+    <select id="isSessionExist" resultType="boolean">
+        select count(open_id) from t_session where open_id = #{openId}
+    </select>
+
+    <select id="selectOpenIdList" resultType="java.lang.String">
+      select open_id from t_user_info order by id limit #{pageIndex},#{pageCount}
+    </select>
+    <update id="updateLastLoginTime">
+        update t_user_info set last_login_time = NOW() where open_id = #{openId}
+    </update>
+
+    <update id="updateSession">
+        update t_session set session_key = #{sessionKey},update_time= NOW() where open_id = #{openId}
+    </update>
+
+    <insert id="insert">
+        insert into t_user_info(open_id,create_time,last_login_time,nick_name,avatar_url,gender,city,province,country)
+        values(#{openId}, NOW(), NOW(),#{nickName},#{avatarUrl},#{gender},#{city},#{province},#{country});
+    </insert>
+
+    <insert id="insertSession">
+        insert into t_session(open_id, session_key,expired_in) values(#{openId},#{sessionKey},7200)
+    </insert>
+
+    <update id="updateBindInfo">
+        update t_user_info set real_name = #{realName},jwc_account=#{jwcAccount}  where open_id = #{openId}
+    </update>
+</mapper>
